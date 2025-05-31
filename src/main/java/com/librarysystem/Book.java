@@ -1,20 +1,23 @@
+// Book.java (Modified)
 package com.librarysystem;
 
-public class Book {
+// implements Loanable
+public class Book implements Loanable {
     private String title;
     private String author;
     private String isbn;
-    private boolean isBorrowed;
+    private boolean isBorrowedStatus; // Renamed to avoid conflict with isBorrowed() method in interface
 
     public Book(String title, String author, String isbn) {
         this.title = title;
         this.author = author;
         this.isbn = isbn;
-        this.isBorrowed = false; // Default: not borrowed
+        this.isBorrowedStatus = false;
     }
 
-    // Getter methods
-    public String getTitle() {
+    // Retaining original getters
+    @Override
+    public String getTitle() { // Implementation from Loanable
         return title;
     }
 
@@ -26,29 +29,33 @@ public class Book {
         return isbn;
     }
 
-    public boolean isBorrowed() {
-        return isBorrowed;
-    }
-
-    // Methods to manage borrowing status
-    public void borrowBook() {
-        if (!this.isBorrowed) {
-            this.isBorrowed = true;
+    // Implementing methods from Loanable
+    @Override
+    public void borrowItem() {
+        if (!this.isBorrowedStatus) {
+            this.isBorrowedStatus = true;
         } else {
-            System.out.println("The book '" + title + "' is already borrowed.");
-        }
-    }
-
-    public void returnBook() {
-        if (this.isBorrowed) {
-            this.isBorrowed = false;
-        } else {
-            System.out.println("The book '" + title + "' is not currently borrowed.");
+            System.out.println("Item '" + title + "' is already borrowed.");
         }
     }
 
     @Override
+    public void returnItem() {
+        if (this.isBorrowedStatus) {
+            this.isBorrowedStatus = false;
+        } else {
+            System.out.println("Item '" + title + "' is not currently borrowed.");
+        }
+    }
+
+    @Override
+    public boolean isBorrowed() {
+        return isBorrowedStatus;
+    }
+
+    @Override
     public String toString() {
-        return "'" + title + "' by " + author + " (ISBN: " + isbn + ") - Status: " + (isBorrowed ? "Borrowed" : "Available");
+        return "'" + title + "' by " + author + " (ISBN: " + isbn + ") - Status: "
+                + (isBorrowedStatus ? "Borrowed" : "Available");
     }
 }
