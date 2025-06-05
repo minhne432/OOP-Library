@@ -1,132 +1,112 @@
-// Library.java (will be extended later)
+// Library.java (Refactored for Part 4)
 package com.librarysystem;
 
 public class Library {
     public static void main(String[] args) {
-        System.out.println("--- TEST PART 1 ---");
+        System.out.println("--- COMPLETE LIBRARY MANAGEMENT SYSTEM TEST (PART 4) ---");
 
-        // Create books
-        Loanable book1 = new Book("Basic Java Programming", "John Doe", "978-1234567890");
-        Loanable book2 = new Book("Data Structures and Algorithms", "Jane Smith", "978-0987654321");
-        Loanable book3 = new Book("OOP in Java", "Alice Wonderland", "978-1122334455");
+        // 1. Create LibraryCatalog
+        LibraryCatalog catalog = new LibraryCatalog();
 
-        System.out.println("\nInitial book information:");
-        System.out.println(book1);
-        System.out.println(book2);
-        System.out.println(book3);
-
-        // Create library members
-        LibraryMember member1 = new LibraryMember("M001", "Andrew Nguyen");
-        LibraryMember member2 = new LibraryMember("M002", "Binh Tran");
-
-        System.out.println("\nMember information:");
-        System.out.println(member1);
-        System.out.println(member2);
-
-        // Simulate borrowing books
-        System.out.println("\n--- Book Borrowing Process ---");
-        member1.borrowItem(book1);
-        member1.borrowItem(book2);
-        member2.borrowItem(book1); // Try borrowing a book that's already borrowed
-        member2.borrowItem(book3);
-
-        System.out.println("\nBook status after borrowing:");
-        System.out.println(book1);
-        System.out.println(book2);
-        System.out.println(book3);
-
-        System.out.println("\nBooks borrowed by each member:");
-        member1.displayBorrowedItems();
-        member2.displayBorrowedItems();
-
-        // Simulate returning books
-        System.out.println("\n--- Book Returning Process ---");
-        member1.returnItem(book1);
-        member2.returnItem(book2); // Member 2 didn't borrow this book
-        member1.returnItem(book3); // Member 1 didn't borrow this book
-
-        System.out.println("\nBook status after returning:");
-        System.out.println(book1);
-        System.out.println(book2);
-        System.out.println(book3);
-
-        System.out.println("\nBooks borrowed by each member after returning:");
-        member1.displayBorrowedItems();
-        member2.displayBorrowedItems();
-
-        System.out.println("\n\n--- PART 2 TESTING ---");
-
-        // Create reference books
-        FictionBook fictionBook = new FictionBook("The Great Adventure", "Leo Tolstoy", "978-5555555555", "Adventure");
-        NonFictionBook nonFictionBook = new NonFictionBook("World History", "Yuval Noah Harari", "978-6666666666",
+        // 2. Add books and DVDs to the catalog
+        Book book1 = new Book("Basic Java Programming", "John Doe", "978-1234567890");
+        Book book2 = new Book("Data Structures and Algorithms", "Jane Smith", "978-0987654321");
+        FictionBook fictionBook1 = new FictionBook("The Great Adventure", "Leo Tolstoy", "978-5555555555", "Adventure");
+        NonFictionBook nonFictionBook1 = new NonFictionBook("World History", "Yuval Noah Harari", "978-6666666666",
                 "930");
-
-        System.out.println("\nReference Book Information:");
-        System.out.println(fictionBook);
-        System.out.println(nonFictionBook);
-
-        // Member borrows reference books
-        System.out.println("\n--- Member Borrows Reference Books ---");
-        LibraryMember member3 = new LibraryMember("M003", "John Smith");
-        System.out.println(member3);
-
-        member3.borrowItem(fictionBook);
-        member3.borrowItem(nonFictionBook);
-
-        System.out.println("\nReference Book Status After Borrowing:");
-        System.out.println(fictionBook);
-        System.out.println(nonFictionBook);
-
-        member3.displayBorrowedItems();
-
-        // Verify that toString() of reference books works correctly
-        System.out.println("\nRechecking Detailed Reference Book Information:");
-        for (Loanable borrowed : member3.getBorrowedItems()) {
-            System.out.println(borrowed.toString()); // Will call toString() of FictionBook/NonFictionBook
-        }
-
-
-        System.out.println("\n\n--- TESTING PART 3 ---");
-
-        // Create DVDs
         DVD dvd1 = new DVD("The Matrix", "Wachowskis", 136);
         DVD dvd2 = new DVD("Inception", "Christopher Nolan", 148);
 
-        System.out.println("\nDVD Information:");
-        System.out.println(dvd1);
-        System.out.println(dvd2);
+        catalog.addItem(book1);
+        catalog.addItem(book2);
+        catalog.addItem(fictionBook1);
+        catalog.addItem(nonFictionBook1);
+        catalog.addItem(dvd1);
+        catalog.addItem(dvd2);
+        catalog.addItem(dvd2); // Attempt to add an already existing item
 
-        // Create a new member or reuse an existing one
-        LibraryMember member4 = new LibraryMember("M004", "Le Thi Diem");
-        System.out.println(member4);
+        // 3. Add members to the catalog
+        LibraryMember member1 = new LibraryMember("M001", "Nguyen Van An");
+        LibraryMember member2 = new LibraryMember("M002", "Tran Thi Binh");
+        LibraryMember member3 = new LibraryMember("M003", "Pham Van Cuong");
 
-        System.out.println("\n--- Member borrows books and DVDs (Polymorphism) ---");
-        // Retrieve a book from a previous part (e.g., book2)
-        // Make sure book2 is not currently borrowed or has been returned
-        if (book2.isBorrowed()) {
-            // If book2 is currently borrowed by member1
-            // Find member1 and request them to return book2, or you won't be able to borrow
-            // it
-            // Let's assume book2 has been returned or is available
-            // Or create a new book:
-            Book newBookForMember4 = new Book("Clean Code", "Robert C. Martin", "978-0132350884");
-            member4.borrowItem(newBookForMember4);
+        catalog.addMember(member1);
+        catalog.addMember(member2);
+        catalog.addMember(member3);
+        catalog.addMember(member3); // Attempt to add an already existing member
+
+        // 4. Simulate full library workflow
+        System.out.println("\n--- Starting library process ---");
+        catalog.displayAllMembers();
+        catalog.displayAllItems(); // Display all initial items
+        catalog.displayAvailableItems(); // Display available items
+
+        // Member searches for and borrows items
+        System.out.println("\n--- An borrows 'Basic Java Programming' ---");
+        Loanable itemToBorrowAn = catalog.findItem("Basic Java Programming");
+        if (itemToBorrowAn != null) {
+            catalog.lendItem(member1, itemToBorrowAn);
         } else {
-            member4.borrowItem(book2); // Borrow an ordinary book
+            System.out.println("Could not find 'Basic Java Programming'.");
         }
 
-        member4.borrowItem(fictionBook); // Borrow a fiction book
-        member4.borrowItem(dvd1); // Borrow a DVD
+        System.out.println("\n--- An borrows DVD 'The Matrix' ---");
+        Loanable itemToBorrowAn2 = catalog.findItem("The Matrix");
+        if (itemToBorrowAn2 != null) {
+            catalog.lendItem(member1, itemToBorrowAn2);
+        } else {
+            System.out.println("Could not find DVD 'The Matrix'.");
+        }
 
-        System.out.println("\nItems borrowed by " + member4.getName() + ":");
-        member4.displayBorrowedItems(); // Will call toString() for Book, FictionBook, DVD
+        System.out.println("\n--- Binh borrows 'World History' ---");
+        Loanable itemToBorrowBinh = catalog.findItem("World History");
+        if (itemToBorrowBinh != null) {
+            catalog.lendItem(member2, itemToBorrowBinh);
+        }
 
-        System.out.println("\n--- Member returns DVD ---");
-        member4.returnItem(dvd1);
-        member4.displayBorrowedItems();
+        System.out.println("\n--- Cuong attempts to borrow 'Basic Java Programming' (already borrowed by An) ---");
+        Loanable itemToBorrowCuong = catalog.findItem("Basic Java Programming");
+        if (itemToBorrowCuong != null) {
+            catalog.lendItem(member3, itemToBorrowCuong);
+        }
 
-        // Check DVD status after returning
-        System.out.println(dvd1);
+        // Display status again
+        catalog.displayAvailableItems();
+        System.out.println("\n--- Items borrowed by An ---");
+        member1.displayBorrowedItems();
+        System.out.println("\n--- Items borrowed by Binh ---");
+        member2.displayBorrowedItems();
+        System.out.println("\n--- Items borrowed by Cuong ---");
+        member3.displayBorrowedItems();
 
+        // Member returns items
+        System.out.println("\n--- An returns 'Basic Java Programming' ---");
+        catalog.acceptReturnedItem(member1, itemToBorrowAn); // itemToBorrowAn still holds the book reference
+
+        System.out.println("\n--- Binh attempts to return a DVD not borrowed ---");
+        catalog.acceptReturnedItem(member2, dvd2); // Binh didn't borrow dvd2
+
+        // Display updated status
+        catalog.displayAvailableItems();
+        System.out.println("\n--- Items borrowed by An (after returning one) ---");
+        member1.displayBorrowedItems();
+
+        System.out.println("\n--- Cuong borrows 'Basic Java Programming' (after An returned it) ---");
+        if (itemToBorrowCuong != null) { // itemToBorrowCuong still references "Basic Java Programming"
+            catalog.lendItem(member3, itemToBorrowCuong);
+        }
+        System.out.println("\n--- Items borrowed by Cuong ---");
+        member3.displayBorrowedItems();
+        catalog.displayAvailableItems();
+
+        System.out.println("\n--- Removing items from catalog ---");
+        catalog.removeItem(dvd2); // Remove DVD Inception (available)
+        catalog.removeItem(itemToBorrowAn2); // Attempt to remove DVD The Matrix (borrowed by An)
+        catalog.displayAllItems();
+
+        System.out.println("\n--- Removing members ---");
+        catalog.removeMember(member2); // Binh has no borrowed items (assumed returned)
+        catalog.removeMember(member1); // An still has The Matrix borrowed
+        catalog.displayAllMembers();
     }
 }
